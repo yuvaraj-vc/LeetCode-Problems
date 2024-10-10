@@ -1,0 +1,41 @@
+LC Number - 962
+
+QUESTION :
+
+A ramp in an integer array nums is a pair (i, j) for which i < j and nums[i] <= nums[j]. The width of such a ramp is j - i.
+Given an integer array nums, return the maximum width of a ramp in nums. If there is no ramp in nums, return 0.
+
+Example 1:
+Input: nums = [6,0,8,2,1,5]
+Output: 4
+Explanation: The maximum width ramp is achieved at (i, j) = (1, 5): nums[1] = 0 and nums[5] = 5.
+
+Example 2:
+Input: nums = [9,8,1,0,1,9,4,0,4,1]
+Output: 7
+Explanation: The maximum width ramp is achieved at (i, j) = (2, 9): nums[2] = 1 and nums[9] = 1.
+
+APPROACH :
+
+  1. Traverse the array from right to left and calculate maxFrmRight[] where maxFrmRight[i] stores 
+     the maximum value from index i to the end.
+  2. Traverse the array again from left to right to find the maximum width ramp.
+
+SOLUTION :
+
+class Solution {
+    public int maxWidthRamp(int[] nums) {
+        int size = nums.length, maxWidth = 0;
+        int maxFrmRight[] = new int[size];
+        for(int indx = size - 1; indx > -1; indx--){
+            int prevMax = (indx + 1 < size) ? maxFrmRight[indx+1] : 0;
+            maxFrmRight[indx] = Math.max(prevMax, nums[indx]);
+        }
+        int prevIndx = 0;
+        for(int currIndx = 0; currIndx < size; currIndx++){
+            while(prevIndx < currIndx && maxFrmRight[currIndx] < nums[prevIndx])prevIndx++;
+            maxWidth = Math.max(maxWidth, currIndx - prevIndx);
+        }
+        return maxWidth;
+    }
+}
